@@ -1,0 +1,31 @@
+mas ants {
+	
+    agent queen {
+    	ag-arch: anthill.Ant
+    	instances: 2
+    	focus: anthill.anthill
+    }
+    
+    agent gardener {
+    	instances: 0
+    }
+    
+    agent wingedmale {
+    	instances: 0
+    }
+    
+    agent worker {
+    	instances: 0
+    }
+    
+    agent larva {
+    	instances: 0
+    }
+    
+	workspace anthill {
+		artifact anthill: anthill.Anthill
+	}
+    
+    asl-path: src/agt, src/agt/inc 
+    class-path: lib
+}
