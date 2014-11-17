@@ -3,6 +3,7 @@ package anthill;
 import cartago.Artifact;
 import cartago.INTERNAL_OPERATION;
 import cartago.OPERATION;
+import cartago.ObsProperty;
 
 public class LifeTickTack extends Artifact {
 
@@ -11,6 +12,7 @@ public class LifeTickTack extends Artifact {
 
 	void init() {
 		counting = false;
+		defineObsProperty("tick", 0);
 	}
 
 	@OPERATION
@@ -18,8 +20,6 @@ public class LifeTickTack extends Artifact {
 		if (!counting) {
 			counting = true;
 			execInternalOp("count");
-		} else {
-			failed("already_counting");
 		}
 	}
 
@@ -31,7 +31,8 @@ public class LifeTickTack extends Artifact {
 	@INTERNAL_OPERATION
 	void count() {
 		while (counting) {
-			signal("deathIsNear");
+			ObsProperty prop = getObsProperty("tick");
+			prop.updateValue(prop.intValue() + 1);
 			await_time(TICK_TIME);
 		}
 	}

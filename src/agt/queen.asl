@@ -7,7 +7,7 @@ max_age(80).
 !life.
 
 +!startReasoning
+	: true
 <-
-	print("Queen!");
-	
+	!move(2, 4, 4);
 	.

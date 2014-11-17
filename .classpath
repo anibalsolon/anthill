@@ -4,11 +4,11 @@
 	<classpathentry excluding="**/*.asl" kind="src" path="src/agt"/>
 	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="src" path="src/env"/>
-	<classpathentry kind="lib" path="/media/Storage/Documents/Master/jason/jacamo-0.3/lib/jason.jar" sourcepath="/home/anibalsolon/temp/jason-svn"/>
-	<classpathentry kind="lib" path="/media/Storage/Documents/Master/jason/jacamo-0.3/lib/cartago.jar"/>
-	<classpathentry kind="lib" path="/media/Storage/Documents/Master/jason/jacamo-0.3/lib/c4jason.jar"/>
-	<classpathentry kind="lib" path="/media/Storage/Documents/Master/jason/jacamo-0.3/lib/moise.jar"/>
-	<classpathentry kind="lib" path="/media/Storage/Documents/Master/jason/jacamo-0.3/lib/jacamo.jar" sourcepath="/home/anibalsolon/temp/jacamo-code/src"/>
-	<classpathentry kind="lib" path="/media/Storage/Documents/Master/jason/jacamo-0.3/lib/intmas.jar"/>
+	<classpathentry kind="lib" path="lib/c4jason.jar"/>
+	<classpathentry kind="lib" path="lib/cartago.jar" sourcepath="/home/anibalsolon/temp/cartago-code/cartago/trunk"/>
+	<classpathentry kind="lib" path="lib/intmas.jar"/>
+	<classpathentry kind="lib" path="lib/jacamo.jar" sourcepath="/home/anibalsolon/temp/jacamo-code"/>
+	<classpathentry kind="lib" path="lib/jason.jar" sourcepath="/home/anibalsolon/temp/jason-code"/>
+	<classpathentry kind="lib" path="lib/moise.jar" sourcepath="/home/anibalsolon/temp/moise-code"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

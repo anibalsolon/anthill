@@ -2,30 +2,47 @@ mas ants {
 	
     agent queen {
     	ag-arch: anthill.Ant
-    	instances: 2
-    	focus: anthill.anthill
-    }
-    
-    agent gardener {
     	instances: 0
     }
     
+    agent gardener {
+    	ag-arch: anthill.Ant
+    	instances: 0
+    	focus: anthill, life
+    	roles: picker in anthillws.foodpicker
+    }
+    
     agent wingedmale {
+    	ag-arch: anthill.Ant
     	instances: 0
     }
     
     agent worker {
-    	instances: 0
+    	ag-arch: anthill.Ant
+    	instances: 1
+    	focus: anthill, life
+    	roles: picker in anthillws.foodpicker
     }
     
     agent larva {
+    	ag-arch: anthill.Ant
     	instances: 0
     }
     
-	workspace anthill {
+	workspace anthillws {
 		artifact anthill: anthill.Anthill
+		artifact life: anthill.LifeTickTack
 	}
-    
+	
+	organisation anthillws: ants.xml {
+		group ants: antgroup {
+			group foodpicker: foodpicker {
+				responsible-for: foodpicking				
+			}
+		}
+		scheme foodpicking: foodpicking
+	}
+	
     asl-path: src/agt, src/agt/inc 
     class-path: lib
 }
