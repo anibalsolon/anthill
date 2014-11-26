@@ -6,8 +6,10 @@ max_age(80).
 /* Initial goals */
 !life.
 
-+!startReasoning
-	: true
++!reproducting:
+	true
 <-
-	!move(2, 4, 4);
+	anthill.actions.wait(2);
+	.create_agent(Worker, "worker.asl");
+	!reproducting;
 	.

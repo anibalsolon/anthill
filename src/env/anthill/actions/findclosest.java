@@ -16,7 +16,7 @@ import java.util.List;
 import anthill.Ant;
 import anthill.Ant.Heuristic;
 import anthill.model.Location;
-import anthill.model.WorldModel.State;
+import anthill.model.WorldModel.LocationType;
 
 public class findclosest extends DefaultInternalAction {
 
@@ -49,7 +49,7 @@ public class findclosest extends DefaultInternalAction {
 
 			heuristic = heuristicForLocation(xTo, yTo);
 		} else {
-			final State state = State.valueOf(((StringTermImpl) args[0]).getString());
+			final LocationType state = LocationType.valueOf(((StringTermImpl) args[0]).getString());
 			heuristic = heuristicForState(state);
 		}
 
@@ -63,7 +63,7 @@ public class findclosest extends DefaultInternalAction {
 		return un.unifies(args[1], path);
 	}
 
-	private Heuristic heuristicForState(final State state) {
+	private Heuristic heuristicForState(final LocationType state) {
 		return new Heuristic() {
 			public boolean isGoal(Location loc) {
 				if (loc == null)

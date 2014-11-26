@@ -10,12 +10,6 @@
 			<role id="picker">
 				<extends role="ant" />
 			</role>
-			<role id="pioneer">
-				<extends role="picker" />
-			</role>
-			<role id="follower">
-				<extends role="picker" />
-			</role>
 			<role id="defender">
 				<extends role="ant" />
 			</role>
@@ -42,8 +36,6 @@
 			<roles>
 				<role id="ant" />
 				<role id="picker" />
-				<role id="pioneer" />
-				<role id="follower" />
 				<role id="defender" />
 				<role id="queen" />
 				<role id="male" />
@@ -55,163 +47,73 @@
 				<group-specification id="foodpicker">
 					<roles>
 						<role id="picker" />
-						<role id="pioneer" />
-<!-- 						<role id="follower" /> -->
-<!-- 						<role id="defender" /> -->
 					</roles>
-					<formation-constraints>
-						<compatibility from="picker" to="pioneer" type="compatibility"
-							scope="intra-group" extends-subgroups="false" bi-dir="true" />
-<!-- 						<compatibility from="picker" to="follower" type="compatibility" -->
-<!-- 							scope="intra-group" extends-subgroups="false" bi-dir="true" /> -->
-					</formation-constraints>
 				</group-specification>
-<!-- 				<group-specification id="maintainer"> -->
-<!-- 					<roles> -->
-<!-- 						<role id="maintainer" /> -->
-<!-- 						<role id="gardener" /> -->
-<!-- 						<role id="nurse" /> -->
-<!-- 					</roles> -->
-<!-- 					<formation-constraints> -->
-<!-- 						<compatibility from="maintainer" to="gardener" type="compatibility" -->
-<!-- 							scope="intra-group" extends-subgroups="false" bi-dir="true" /> -->
-<!-- 						<compatibility from="maintainer" to="nurse" type="compatibility" -->
-<!-- 							scope="intra-group" extends-subgroups="false" bi-dir="true" /> -->
-<!-- 					</formation-constraints> -->
-<!-- 				</group-specification> -->
-<!-- 				<group-specification id="reproduction"> -->
-<!-- 					<roles> -->
-<!-- 						<role id="queen" /> -->
-<!-- 						<role id="male" /> -->
-<!-- 					</roles> -->
-<!-- 				</group-specification> -->
+				<group-specification id="maintainer">
+					<roles>
+						<role id="maintainer" />
+						<role id="gardener" />
+						<role id="nurse" />
+					</roles>
+				</group-specification>
+				<group-specification id="reproductor">
+					<roles>
+						<role id="queen" />
+						<role id="male" />
+					</roles>
+				</group-specification>
 			</subgroups>
 		</group-specification>
 	</structural-specification>
 
 	<functional-specification>
 		<scheme id="foodpicking">
-			<goal id="foodpicking">
-				<plan operator="sequence">
-					<goal id="role_decision" />
-					<goal id="pioneering">
-						<plan operator="parallel">
-							<goal id="go_outside" />
-							<goal id="look_for_food" />
-							<goal id="extract_food" />
-							<goal id="bring_to_anthill" />
-						</plan>
-					</goal>
-<!-- 					<goal id="defending"> -->
-<!-- 						<plan operator="sequence"> -->
-<!-- 							<goal id="look_for_danger" /> -->
-<!-- 						</plan> -->
-<!-- 					</goal> -->
-				</plan>
-			</goal>
-			<mission id="foodpickingstart">
-				<goal id="role_decision" />
+			<goal id="foodpicking" />
+			<mission id="foodpicking">
+				<goal id="foodpicking" />
 			</mission>
-			<mission id="pioneering">
-				<goal id="pioneering" />
-<!-- 				<goal id="go_outside" /> -->
-<!-- 				<goal id="look_for_food" /> -->
-<!-- 				<goal id="extract_food" /> -->
-<!-- 				<goal id="bring_to_anthill" /> -->
-			</mission>
-<!-- 			<mission id="following"> -->
-<!-- 				<goal id="go_outside" /> -->
-<!-- 				<goal id="look_for_food" /> -->
-<!-- 				<goal id="extract_food" /> -->
-<!-- 				<goal id="bring_to_anthill" /> -->
-<!-- 			</mission> -->
 <!-- 			<mission id="defending"> -->
 <!-- 				<goal id="go_outside" /> -->
 <!-- 				<goal id="look_for_danger" /> -->
 <!-- 			</mission> -->
 		</scheme>
-<!-- 		<scheme id="maintaining"> -->
-<!-- 			<goal id="maintaining"> -->
-<!-- 				<plan operator="sequence"> -->
-<!-- 					<goal id="start"> -->
-<!-- 						<plan operator="sequence"> -->
-<!-- 							<goal id="role_decision" /> -->
-<!-- 						</plan> -->
-<!-- 					</goal> -->
-<!-- 					<goal id="gardening"> -->
-<!-- 						<plan operator="sequence"> -->
-<!-- 							<goal id="go_stock" /> -->
-<!-- 							<goal id="get_food" /> -->
-<!-- 							<goal id="go_farm" /> -->
-<!-- 						</plan> -->
-<!-- 					</goal> -->
-<!-- 					<goal id="nursing"> -->
-<!-- 						<plan operator="sequence"> -->
-<!-- 							<goal id="go_stock" /> -->
-<!-- 							<goal id="get_food" /> -->
-<!-- 							<goal id="go_farm" /> -->
-<!-- 						</plan> -->
-<!-- 					</goal> -->
-<!-- 				</plan> -->
-<!-- 			</goal> -->
-<!-- 			<mission id="maintainingstart"> -->
-<!-- 				<goal id="role_decision" /> -->
-<!-- 			</mission> -->
-<!-- 			<mission id="gardening"> -->
-<!-- 				<goal id="go_stock" /> -->
-<!-- 				<goal id="get_food" /> -->
-<!-- 				<goal id="go_farm" /> -->
-<!-- 			</mission> -->
-<!-- 			<mission id="nursing"> -->
-<!-- 				<goal id="go_stock" /> -->
-<!-- 				<goal id="get_food" /> -->
-<!-- 				<goal id="go_farm" /> -->
-<!-- 			</mission> -->
-<!-- 		</scheme> -->
-<!-- 		<scheme id="reproducting"> -->
-<!-- 			<goal id="reproducting"> -->
-<!-- 				<plan operator="sequence"> -->
-<!-- 					<goal id="queen"> -->
-<!-- 						<plan operator="sequence"> -->
-<!-- 							<goal id="go_outside" /> -->
-<!-- 							<goal id="call_for_male" /> -->
-<!-- 							<goal id="reproduct" /> -->
-<!-- 							<goal id="go_maternity" /> -->
-<!-- 							<goal id="depot_larvae" /> -->
-<!-- 						</plan> -->
-<!-- 					</goal> -->
-<!-- 					<goal id="male"> -->
-<!-- 						<plan operator="sequence"> -->
-<!-- 							<goal id="go_outside" /> -->
-<!-- 							<goal id="reproduct" /> -->
-<!-- 						</plan> -->
-<!-- 					</goal> -->
-<!-- 				</plan> -->
-<!-- 			</goal> -->
-<!-- 			<mission id="queen"> -->
-<!-- 				<goal id="go_outside" /> -->
-<!-- 				<goal id="call_for_male" /> -->
-<!-- 				<goal id="reproduct" /> -->
-<!-- 				<goal id="go_maternity" /> -->
-<!-- 				<goal id="depot_larvae" /> -->
-<!-- 			</mission> -->
-<!-- 			<mission id="male"> -->
-<!-- 				<goal id="go_outside" /> -->
-<!-- 				<goal id="reproduct" /> -->
-<!-- 			</mission> -->
-<!-- 		</scheme> -->
+		<scheme id="maintaining">
+			<goal id="maintaining">
+				<plan operator="sequence">
+					<goal id="maintainingrole" />				
+					<goal id="gardening" />
+					<goal id="nursing" />
+				</plan>
+			</goal>
+			<mission id="maintaining">
+				<goal id="maintainingrole" />
+			</mission>
+			<mission id="gardening">
+				<goal id="gardening" />
+			</mission>
+			<mission id="nursing">
+				<goal id="nursing" />
+			</mission>
+		</scheme>
+		<scheme id="reproducting">
+			<goal id="reproducting" />
+			<mission id="reproducting">
+				<goal id="reproducting" />
+			</mission>
+			<mission id="male">
+				<goal id="reproducting" />
+			</mission>
+		</scheme>
 	</functional-specification>
 
 	<normative-specification>
-		<norm id="n10" type="obligation" role="picker" mission="foodpickingstart" />
-		<norm id="n20" type="obligation" role="pioneer" mission="pioneering" />
-<!-- 		<norm id="n30" type="obligation" role="follower" mission="following" /> -->
+		<norm id="n10" type="obligation" role="picker" mission="foodpicking" />
 <!-- 		<norm id="n40" type="obligation" role="defender" mission="defending" /> -->
-<!-- 		<norm id="n50" type="obligation" role="maintainer" mission="maintainingstart" /> -->
-<!-- 		<norm id="n60" type="obligation" role="gardener" mission="gardening" /> -->
-<!-- 		<norm id="n70" type="obligation" role="nurse" mission="nursing" /> -->
-<!-- 		<norm id="n80" type="obligation" role="queen" mission="queen" /> -->
-<!-- 		<norm id="n90" type="obligation" role="male" mission="male" /> -->
+		<norm id="n50" type="obligation" role="maintainer" mission="maintaining" />
+		<norm id="n60" type="obligation" role="gardener" mission="gardening" />
+		<norm id="n70" type="obligation" role="nurse" mission="nursing" />
+		<norm id="n80" type="obligation" role="queen" mission="reproducting" />
+		<norm id="n90" type="obligation" role="male" mission="reproducting" />
 	</normative-specification>
 
 </organisational-specification>

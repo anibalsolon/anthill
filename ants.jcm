@@ -3,23 +3,27 @@ mas ants {
     agent queen {
     	ag-arch: anthill.Ant
     	instances: 0
+    	focus: anthill, life
+//    	roles: queen in anthillws.reproductor
     }
     
-    agent gardener {
+    agent maintainer {
     	ag-arch: anthill.Ant
     	instances: 0
     	focus: anthill, life
-    	roles: picker in anthillws.foodpicker
+//    	roles: maintainer in anthillws.maintainer
     }
     
     agent wingedmale {
     	ag-arch: anthill.Ant
     	instances: 0
+    	focus: anthill, life
+//    	roles: wingedmale in anthillws.reproductor
     }
     
     agent worker {
     	ag-arch: anthill.Ant
-    	instances: 1
+    	instances: 5
     	focus: anthill, life
     	roles: picker in anthillws.foodpicker
     }
@@ -27,6 +31,7 @@ mas ants {
     agent larva {
     	ag-arch: anthill.Ant
     	instances: 0
+    	focus: life
     }
     
 	workspace anthillws {
@@ -37,10 +42,18 @@ mas ants {
 	organisation anthillws: ants.xml {
 		group ants: antgroup {
 			group foodpicker: foodpicker {
-				responsible-for: foodpicking				
+				responsible-for: foodpicking
+			}
+			group reproductor: reproductor {
+				responsible-for: reproducting
+			}
+			group maintainer: maintainer {
+				responsible-for: maintaining
 			}
 		}
-		scheme foodpicking: foodpicking
+		scheme foodpicking  : foodpicking
+		scheme reproducting : reproducting
+		scheme maintaining  : maintaining
 	}
 	
     asl-path: src/agt, src/agt/inc 

@@ -11,7 +11,7 @@ import anthill.Ant;
 import anthill.model.Level;
 import anthill.model.Location;
 import anthill.model.WorldModel.InfoType;
-import anthill.model.WorldModel.State;
+import anthill.model.WorldModel.LocationType;
 
 public class knowledge extends DefaultInternalAction {
 
@@ -38,7 +38,7 @@ public class knowledge extends DefaultInternalAction {
 				ant.currentLevel.model[x][y].pher = (float) pher;
 				break;
 			case STATE:
-				State state = State.valueOf(((StringTermImpl) args[4]).getString());
+				LocationType state = LocationType.valueOf(((StringTermImpl) args[4]).getString());
 				ant.currentLevel.model[x][y].state = state;
 				break;
 			default:

@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 import anthill.model.Level;
 import anthill.model.Location;
 import anthill.model.WorldModel;
-import anthill.model.WorldModel.State;
+import anthill.model.WorldModel.LocationType;
 
 public class Drawer extends JPanel implements MouseWheelListener, KeyListener {
 
@@ -92,7 +92,7 @@ public class Drawer extends JPanel implements MouseWheelListener, KeyListener {
 				int y = j + level.offsety;
 
 				Point p = pointForIndex(x, y);
-				State st = loc.state;
+				LocationType st = loc.state;
 
 				int nextInt;
 				String[] grounds;
@@ -126,7 +126,7 @@ public class Drawer extends JPanel implements MouseWheelListener, KeyListener {
 					break;
 				}
 				
-				if(st == State.FOOD){
+				if(st == LocationType.FOOD){
 					big.drawImage(images.get("food-1"), p.x, p.y, tilesize.width + 4, tilesize.height + 2, this);
 				}
 

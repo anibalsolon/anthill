@@ -1,7 +1,7 @@
 +!move(location(LevelTo, XTo, YTo))
 	: lvlknow(false) | not lvlknow(_)
 <-
-	.wait(300);
+	anthill.actions.wait(0.3);
 	!move(location(LevelTo, XTo, YTo));
 	.
 
@@ -41,7 +41,7 @@
 	-location(_, _, _);
 	+location(LevelTo, XTo, YTo);
 	
-	.wait(500);
+	anthill.actions.wait(0.5);
 	
 	lookupArtifact("anthill", Anthill);
 	move(XTo-XFrom, YTo-YFrom) [artifact_id(Anthill)];

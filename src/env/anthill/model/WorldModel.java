@@ -19,7 +19,7 @@ public class WorldModel {
 		STATE, PHER;
 	}
 
-	public enum State {
+	public enum LocationType {
 		GROUND, HOLE_UP, HOLE_DOWN, FOOD;
 	}
 
@@ -40,7 +40,7 @@ public class WorldModel {
 		String leveldef;
 		leveldef = "/levels/anthill-1.lvl";
 //		 leveldef = "/levels/anthill-sample-1.lvl";
-		 leveldef = "/levels/anthill-sample-2.lvl";
+//		 leveldef = "/levels/anthill-sample-2.lvl";
 
 		File resource = new File(getClass().getResource(leveldef).toURI());
 		BufferedReader br = new BufferedReader(new FileReader(resource));
@@ -75,16 +75,16 @@ public class WorldModel {
 
 					switch (line.charAt(x)) {
 					case '█':
-						level.model[x][y].state = State.GROUND;
+						level.model[x][y].state = LocationType.GROUND;
 						break;
 					case '░':
-						level.model[x][y].state = State.FOOD;
+						level.model[x][y].state = LocationType.FOOD;
 						break;
 					case '↑':
-						level.model[x][y].state = State.HOLE_UP;
+						level.model[x][y].state = LocationType.HOLE_UP;
 						break;
 					case '↓':
-						level.model[x][y].state = State.HOLE_DOWN;
+						level.model[x][y].state = LocationType.HOLE_DOWN;
 						break;
 					default:
 						level.model[x][y] = null;
@@ -106,12 +106,12 @@ public class WorldModel {
 				for (int y = 0; y < level.height; y++) {
 					if (level.model[x][y] == null)
 						continue;
-					if (level.model[x][y].state != State.HOLE_DOWN && level.model[x][y].state != State.HOLE_UP)
+					if (level.model[x][y].state != LocationType.HOLE_DOWN && level.model[x][y].state != LocationType.HOLE_UP)
 						continue;
 					level.model[x][y].link = getLink(level.model[x][y]);
 					if (level.model[x][y].link == null) {
 						System.out.println("There is a disconnected stair at " + level.model[x][y] + " .");
-						level.model[x][y].state = State.GROUND;
+						level.model[x][y].state = LocationType.GROUND;
 					}
 				}
 			}
@@ -122,18 +122,18 @@ public class WorldModel {
 		if (loc == null || loc.level == null)
 			return null;
 		int leveli = loc.level.level;
-		if (loc.state == State.HOLE_UP) {
+		if (loc.state == LocationType.HOLE_UP) {
 			if (leveli == 0)
 				return null;
 			Location locto = levels.get(leveli - 1).getAt(loc);
-			if (locto != null && locto.state == State.HOLE_DOWN)
+			if (locto != null && locto.state == LocationType.HOLE_DOWN)
 				return locto;
 		}
-		if (loc.state == State.HOLE_DOWN) {
+		if (loc.state == LocationType.HOLE_DOWN) {
 			if (leveli == levels.size() - 1)
 				return null;
 			Location locto = levels.get(leveli + 1).getAt(loc);
-			if (locto != null && locto.state == State.HOLE_UP)
+			if (locto != null && locto.state == LocationType.HOLE_UP)
 				return locto;
 
 		}
@@ -179,7 +179,7 @@ public class WorldModel {
 		return points;
 	}
 
-	public List<Location> getPlaces(Level level, State state) {
+	public List<Location> getPlaces(Level level, LocationType state) {
 		Location[][] model = level.model;
 		List<Location> points = new ArrayList<Location>();
 		for (int x = 0; x < model.length; x++) {
@@ -193,7 +193,7 @@ public class WorldModel {
 		return points;
 	}
 
-	public Location getRandomPlace(Level level, State state) {
+	public Location getRandomPlace(Level level, LocationType state) {
 		List<Location> places = getPlaces(level, state);
 		int point = rand.nextInt(places.size());
 		return places.get(point);

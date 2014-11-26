@@ -4,6 +4,7 @@
 	<classpathentry excluding="**/*.asl" kind="src" path="src/agt"/>
 	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="src" path="src/env"/>
+	<classpathentry kind="src" path="src/rl"/>
 	<classpathentry kind="lib" path="lib/c4jason.jar"/>
 	<classpathentry kind="lib" path="lib/cartago.jar" sourcepath="/home/anibalsolon/temp/cartago-code/cartago/trunk"/>
 	<classpathentry kind="lib" path="lib/intmas.jar"/>

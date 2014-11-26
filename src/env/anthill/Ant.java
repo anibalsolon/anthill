@@ -11,15 +11,20 @@ import java.util.Map;
 
 import anthill.model.Level;
 import anthill.model.Location;
+import anthill.model.rl.RLAntEnv;
 import c4jason.CAgentArch;
 
 public class Ant extends JaCaMoAgArch {
 
 	public Level currentLevel;
+	public Location position;
+
+	public RLAntEnv zeroEnv;
 
 	@Override
 	public void init() throws Exception {
 		super.init();
+		zeroEnv = new RLAntEnv(this);
 	}
 
 	public CAgentArch getCartagoArch() {

@@ -1,10 +1,14 @@
 package anthill;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import anthill.actions.my_type;
 import anthill.model.Level;
 import anthill.model.Location;
 import anthill.model.WorldModel;
 import anthill.model.WorldModel.InfoType;
-import anthill.model.WorldModel.State;
+import anthill.model.WorldModel.LocationType;
 import anthill.view.AnthillView;
 import cartago.AgentId;
 import cartago.Artifact;
@@ -15,13 +19,21 @@ public class Anthill extends Artifact {
 
 	public AnthillView view;
 	public WorldModel model;
+	public Map<String, Integer> anthillCount;
+
+	boolean counting = false;
+	
+	public final static long TIME_DILATATION = 100; // TODO verify english
+	public final static long EVAPORATION_TIME = 5 * TIME_DILATATION;
 
 	public void init() {
 		try {
 			model = new WorldModel(this);
 			view = new AnthillView(this);
 			view.repaint();
-			
+
+			anthillCount = new HashMap<String, Integer>();
+
 			if (!counting) {
 				counting = true;
 				execInternalOp("evaporate");
@@ -31,9 +43,6 @@ public class Anthill extends Artifact {
 			e.printStackTrace();
 		}
 	}
-
-	boolean counting = false;
-	final static long EVAPORATION_TIME = 1 * 5000;
 
 	@INTERNAL_OPERATION
 	void evaporate() {
@@ -49,12 +58,28 @@ public class Anthill extends Artifact {
 	}
 
 	@OPERATION
-	public void initPos() {
+	public void initAnt() {
 		AgentId ant = getOpUserId();
+
+		String type = my_type.getType(ant.getAgentName());
+		Integer count = anthillCount.get(type);
+		if (count == null)
+			anthillCount.put(type, 1);
+		else
+			anthillCount.put(type, count + 1);
+
 		Location random = model.getRandomSafePlace();
 		model.setAntPosition(ant.getAgentName(), random);
 		location();
 		level();
+	}
+
+	@OPERATION
+	public void die() {
+		AgentId ant = getOpUserId();
+		String type = my_type.getType(ant.getAgentName());
+		Integer count = anthillCount.get(type);
+		anthillCount.put(type, count - 1);
 	}
 
 	@OPERATION
@@ -83,7 +108,7 @@ public class Anthill extends Artifact {
 	public void up() {
 		AgentId ant = getOpUserId();
 		Location current = model.getAntPosition(ant.getAgentName());
-		if (current.state == State.HOLE_UP) {
+		if (current.state == LocationType.HOLE_UP) {
 			Location up = model.getLink(current);
 			model.setAntPosition(ant.getAgentName(), up);
 			location();
@@ -95,7 +120,7 @@ public class Anthill extends Artifact {
 	public void down() {
 		AgentId ant = getOpUserId();
 		Location current = model.getAntPosition(ant.getAgentName());
-		if (current.state == State.HOLE_DOWN) {
+		if (current.state == LocationType.HOLE_DOWN) {
 			Location down = model.getLink(current);
 			model.setAntPosition(ant.getAgentName(), down);
 			location();

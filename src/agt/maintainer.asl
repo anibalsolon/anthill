@@ -5,3 +5,9 @@ max_age(80).
 
 /* Initial goals */
 !life.
+
++!maintainingrole:
+	true
+<-
+	true;
+	.

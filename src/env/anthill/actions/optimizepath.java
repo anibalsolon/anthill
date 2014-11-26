@@ -17,7 +17,7 @@ import java.util.List;
 
 import anthill.Ant;
 import anthill.model.Location;
-import anthill.model.WorldModel.State;
+import anthill.model.WorldModel.LocationType;
 
 public class optimizepath extends DefaultInternalAction {
 
@@ -59,7 +59,7 @@ public class optimizepath extends DefaultInternalAction {
 			}
 			if (i > 0) {
 				Location at = ant.currentLevel.getAt(iloc);
-				if (at.state == State.HOLE_DOWN) {
+				if (at.state == LocationType.HOLE_DOWN) {
 					pathList = pathList.subList(i, pathList.size());
 					break;
 				}

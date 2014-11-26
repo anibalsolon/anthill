@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import anthill.model.WorldModel.State;
+import anthill.model.WorldModel.LocationType;
+import anthill.model.rl.Action;
+import anthill.model.rl.Action.Direction;
 import anthill.util.Random;
 
 public class Location extends Point {
@@ -19,7 +21,7 @@ public class Location extends Point {
 	private static final long serialVersionUID = 1L;
 
 	public Level level;
-	public State state;
+	public LocationType state;
 	public float pher = 0.0f;
 	public Location link;
 	public int visits = 0;
@@ -102,7 +104,7 @@ public class Location extends Point {
 
 			}
 		}
-		
+
 		Collections.shuffle(neighs);
 		return neighs;
 	}
@@ -129,5 +131,21 @@ public class Location extends Point {
 		pher -= factor;
 		if (pher < 0)
 			pher = 0f;
+	}
+
+	public Action actionTo(Location location) {
+		if (this.x == location.x) {
+			if (this.y == location.y - 1)
+				return new Action(Direction.UP);
+			if (this.y == location.y + 1)
+				return new Action(Direction.DOWN);
+		}
+		if (this.y == location.y) {
+			if (this.x == location.x - 1)
+				return new Action(Direction.RIGHT);
+			if (this.x == location.x + 1)
+				return new Action(Direction.LEFT);
+		}
+		return null;
 	}
 }

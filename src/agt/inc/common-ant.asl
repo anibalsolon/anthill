@@ -2,11 +2,19 @@
 { include("common-moise.asl") }
 { include("common-ant-move.asl") }
 
+initial_roles(worker, picker).
+initial_roles(queen, queen).
+initial_roles(maintainer, maintainer).
+initial_roles(wingedmale, male).
+
 /* Goals */
 +!life:
 	true
 <-
 	+age(0);
+	
+	anthill.actions.my_type(Type);
+	.print("I am ", Type);
 	
 	lookupArtifact("life", Clock);
 	focus(Clock);
@@ -14,9 +22,36 @@
 
 	lookupArtifact("anthill", Anthill);
 	focus(Anthill);
-	initPos [artifact_id(Anthill)];
+	
+	if(Type \== larva){
+		
+		initAnt [artifact_id(Anthill)];
+		
+		?initial_roles(Type, Role);
+		.print("I must assume ", Role);
+		adoptRole(Role);
+			
+	}
 	
 	.print("Im alive!");
+	.
+	
++!die:
+	true
+<-
+	lookupArtifact("life", Clock);
+	stopFocus(Clock);
+
+	lookupArtifact("anthill", Anthill);
+	stopFocus(Anthill);
+	
+	anthill.actions.my_type(Type);
+	if(Type \== larva){
+		die [artifact_id(Anthill)];
+	}
+
+	.my_name(Name);
+	.kill_agent(Name);
 	.
 	
 +!waitLevel: lvlknow(false) | not lvlknow(_) <- .print("Waiting level"); .wait(800); !waitLevel; .
@@ -28,6 +63,12 @@
 	-location(_, _, _);
 	+location(Level, X, Y);
 	.print("I am at ", location(Level, X, Y));
+	.
+	
++location(Level, X, Y)[source(A)]:
+	A == self
+<-
+	anthill.actions.position(location(Level, X, Y))
 	.
 	
 +lvlknow(Init)[source(A)]:
@@ -73,11 +114,6 @@
 	.random( R );
 
 	if(M < N * ( R + 0.5 )){
-
-		.my_name(NAME);
-		
-		// TODO place dead body
-		.kill_agent(NAME);
-
+		!die;
 	}
 	.
