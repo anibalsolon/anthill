@@ -59,7 +59,7 @@ public class optimizepath extends DefaultInternalAction {
 			}
 			if (i > 0) {
 				Location at = ant.currentLevel.getAt(iloc);
-				if (at.state == LocationType.HOLE_DOWN) {
+				if (at.type == LocationType.HOLE_DOWN) {
 					pathList = pathList.subList(i, pathList.size());
 					break;
 				}

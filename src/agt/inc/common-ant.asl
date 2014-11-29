@@ -53,16 +53,14 @@ initial_roles(wingedmale, male).
 	.my_name(Name);
 	.kill_agent(Name);
 	.
-	
-+!waitLevel: lvlknow(false) | not lvlknow(_) <- .print("Waiting level"); .wait(800); !waitLevel; .
-+!waitLevel: lvlknow(true) <- .wait(800); .
+
+waiting(Level) :- not lvlknow(Level, _, _).
 
 +location(Level, X, Y)[source(A)]:
 	A \== self
 <-
 	-location(_, _, _);
 	+location(Level, X, Y);
-	.print("I am at ", location(Level, X, Y));
 	.
 	
 +location(Level, X, Y)[source(A)]:
@@ -71,38 +69,52 @@ initial_roles(wingedmale, male).
 	anthill.actions.position(location(Level, X, Y))
 	.
 	
-+lvlknow(Init)[source(A)]:
-	A \== self
+// Wait for current location	
++lvlknow(Level, W, H)[source(A)]:
+	A \== self & not location(CurrLevel, _, _)
 <-
-	-lvlknow(_);
-	if(not Init){
-		-lvlknow(_, _, _, _, _);
-	}
-	+lvlknow(Init);
-	.
+	+lvlknow(Level, W, H)[source(A)];
+	.wait(1000);
+	.	
 	
+// Level size
 +lvlknow(Level, W, H)[source(A)]:
 	A \== self & location(CurrLevel, _, _) & CurrLevel == Level
 <-
-//	.print(lvlknow(Level, W, H));
-	+lvlknow(Level, W, H);
-	anthill.actions.knowledge(Level, W, H);
+	if(anthill.actions.knowledge(Level, W, H)){
+		.print("Level ", Level, " is ", W, "x", H);
+		+lvlknow(Level, W, H);
+	} else {
+		+lvlknow(Level, W, H)[source(A)];
+	}
+	.wait(1000);
 	.
-	
+
+// Wait for level size
 +lvlknow(Level, X, Y, Type, State)[source(A)]:
 	A \== self & location(CurrLevel, _, _) & CurrLevel == Level & not lvlknow(Level, _, _)
 <-
 	+lvlknow(Level, X, Y, Type, State)[source(A)];
-	.print("Waiting for level info");
-	.wait(500);
+	.wait(1000);
 	.
 
+// Location info (type and pheromones)
 +lvlknow(Level, X, Y, Type, State)[source(A)]:
-	A \== self & location(CurrLevel, _, _) & CurrLevel == Level 
+	A \== self & location(CurrLevel, _, _) & CurrLevel == Level & lvlknow(Level, W, H)
 <-
-//	.print(lvlknow(Level, X, Y, Type, State));
+	if(anthill.actions.knowledge(Level, X, Y, Type, State)){
+		+lvlknow(Level, X, Y, Type, State);
+	} else {
+		+lvlknow(Level, X, Y, Type, State)[source(A)];
+	}
+	.wait(1000);
+	.
+	
+// Landmarks
++lvlknow(Level, X, Y, Type, State)[source(A)]:
+	A \== self & anthill.actions.is_landmark(State)
+<-
 	+lvlknow(Level, X, Y, Type, State);
-	anthill.actions.knowledge(Level, X, Y, Type, State);
 	.
 	
 +tick(WorldAge):

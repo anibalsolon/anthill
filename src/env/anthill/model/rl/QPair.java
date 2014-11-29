@@ -1,13 +1,5 @@
-package net.davidrobles.rl;
+package anthill.model.rl;
 
-/**
- * A State-Action pair.
- * 
- * @param <S>
- *            the type of the states
- * @param <A>
- *            the type of the actions
- */
 public class QPair<S, A> {
 	private S state;
 	private A action;
@@ -26,6 +18,7 @@ public class QPair<S, A> {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
@@ -33,7 +26,7 @@ public class QPair<S, A> {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		QPair qPair = (QPair) o;
+		QPair<S, A> qPair = (QPair<S, A>) o;
 
 		if (action != null ? !action.equals(qPair.action) : qPair.action != null)
 			return false;
@@ -48,7 +41,6 @@ public class QPair<S, A> {
 	public int hashCode() {
 		int result = state != null ? state.hashCode() : 0;
 		result = 31 * result + (action != null ? action.hashCode() : 0);
-
 		return result;
 	}
 }

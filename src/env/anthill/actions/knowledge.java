@@ -18,7 +18,7 @@ public class knowledge extends DefaultInternalAction {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
+	public synchronized Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
 		Ant ant = getAntArch(ts.getUserAgArch());
 		if (args.length == 3) {
 			int level = (int) ((NumberTermImpl) args[0]).solve();
@@ -27,9 +27,16 @@ public class knowledge extends DefaultInternalAction {
 			ant.currentLevel = new Level(level, width, height);
 		}
 		if (args.length == 5) {
+
+			if (ant.currentLevel == null){
+				System.out.println("CURR LEVEL IS NULL");
+				return false;
+			}
+
 			int x = (int) ((NumberTermImpl) args[1]).solve();
 			int y = (int) ((NumberTermImpl) args[2]).solve();
 			InfoType type = InfoType.valueOf(((StringTermImpl) args[3]).getString());
+
 			if (ant.currentLevel.model[x][y] == null)
 				ant.currentLevel.model[x][y] = new Location(ant.currentLevel, x, y);
 			switch (type) {
@@ -39,7 +46,7 @@ public class knowledge extends DefaultInternalAction {
 				break;
 			case STATE:
 				LocationType state = LocationType.valueOf(((StringTermImpl) args[4]).getString());
-				ant.currentLevel.model[x][y].state = state;
+				ant.currentLevel.model[x][y].type = state;
 				break;
 			default:
 				break;

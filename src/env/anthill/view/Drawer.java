@@ -92,7 +92,7 @@ public class Drawer extends JPanel implements MouseWheelListener, KeyListener {
 				int y = j + level.offsety;
 
 				Point p = pointForIndex(x, y);
-				LocationType st = loc.state;
+				LocationType st = loc.type;
 
 				int nextInt;
 				String[] grounds;

@@ -1,7 +1,7 @@
 +!move(location(LevelTo, XTo, YTo))
-	: lvlknow(false) | not lvlknow(_)
+	: location(CurrLevel, _, _) & CurrLevel == Level & not lvlknow(Level, _, _)
 <-
-	anthill.actions.wait(0.3);
+	.wait(300);
 	!move(location(LevelTo, XTo, YTo));
 	.
 
@@ -9,7 +9,7 @@
 	: location(LevelFrom, XFrom, YFrom) & LevelFrom == LevelTo &
 	( ( XFrom == XTo & YFrom == YTo ) | not .ground(XTo) & not .ground(YTo) )
 <-
-	.print("Fuckin here :)");
+	.print("Fuckin here.");
 	.
 
 +!move(location(LevelTo, XTo, YTo))
@@ -37,7 +37,6 @@
 +!move(location(LevelTo, XTo, YTo))
 	: location(LevelFrom, XFrom, YFrom) & anthill.actions.is_neighbour(location(LevelFrom, XFrom, YFrom), location(LevelTo, XTo, YTo))
 <-
-	.print("Moving from ", location(LevelFrom, XFrom, YFrom), " to ", location(LevelTo, XTo, YTo));
 	-location(_, _, _);
 	+location(LevelTo, XTo, YTo);
 	
@@ -98,7 +97,7 @@
 	.
 	
 +!down
-	: location(CurrLevel, X, Y) & lvlknow(CurrLevel, X, Y, "STATE", State) & State == "HOLE_DOWN"
+	: location(CurrLevel, X, Y) //& lvlknow(CurrLevel, X, Y, "STATE", State) & State == "HOLE_DOWN"
 <-
 	lookupArtifact("anthill", Anthill);
 	down [artifact_id(Anthill)];

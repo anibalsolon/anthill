@@ -20,7 +20,12 @@ public class WorldModel {
 	}
 
 	public enum LocationType {
-		GROUND, HOLE_UP, HOLE_DOWN, FOOD;
+		GROUND, HOLE_UP, HOLE_DOWN, FOOD, SUGAR, FUNGUS, LARVAE;
+
+		public boolean isLandmark() {
+			return this == FUNGUS || this == SUGAR || this == LARVAE;
+		}
+
 	}
 
 	public Anthill anthill;
@@ -29,7 +34,12 @@ public class WorldModel {
 	public int height;
 
 	public Map<String, Location> ants;
+
 	public List<Level> levels;
+
+	public Map<Location, Sugar> sugars;
+	public Map<Location, Fungus> fungi;
+	public Map<Location, Larva> larvae;
 
 	public WorldModel(Anthill anthill) throws Exception {
 
@@ -39,8 +49,8 @@ public class WorldModel {
 
 		String leveldef;
 		leveldef = "/levels/anthill-1.lvl";
-//		 leveldef = "/levels/anthill-sample-1.lvl";
-//		 leveldef = "/levels/anthill-sample-2.lvl";
+		// leveldef = "/levels/anthill-sample-1.lvl";
+		// leveldef = "/levels/anthill-sample-2.lvl";
 
 		File resource = new File(getClass().getResource(leveldef).toURI());
 		BufferedReader br = new BufferedReader(new FileReader(resource));
@@ -75,16 +85,28 @@ public class WorldModel {
 
 					switch (line.charAt(x)) {
 					case '█':
-						level.model[x][y].state = LocationType.GROUND;
+						level.model[x][y].type = LocationType.GROUND;
 						break;
 					case '░':
-						level.model[x][y].state = LocationType.FOOD;
+						level.model[x][y].type = LocationType.FOOD;
+						break;
+					case '@':
+						level.model[x][y].type = LocationType.SUGAR;
+						sugars.put(level.model[x][y], new Sugar());
+						break;
+					case '#':
+						level.model[x][y].type = LocationType.FUNGUS;
+						fungi.put(level.model[x][y], new Fungus());
+						break;
+					case '+':
+						level.model[x][y].type = LocationType.LARVAE;
+						larvae.put(level.model[x][y], new Larva());
 						break;
 					case '↑':
-						level.model[x][y].state = LocationType.HOLE_UP;
+						level.model[x][y].type = LocationType.HOLE_UP;
 						break;
 					case '↓':
-						level.model[x][y].state = LocationType.HOLE_DOWN;
+						level.model[x][y].type = LocationType.HOLE_DOWN;
 						break;
 					default:
 						level.model[x][y] = null;
@@ -106,12 +128,12 @@ public class WorldModel {
 				for (int y = 0; y < level.height; y++) {
 					if (level.model[x][y] == null)
 						continue;
-					if (level.model[x][y].state != LocationType.HOLE_DOWN && level.model[x][y].state != LocationType.HOLE_UP)
+					if (level.model[x][y].type != LocationType.HOLE_DOWN && level.model[x][y].type != LocationType.HOLE_UP)
 						continue;
 					level.model[x][y].link = getLink(level.model[x][y]);
 					if (level.model[x][y].link == null) {
 						System.out.println("There is a disconnected stair at " + level.model[x][y] + " .");
-						level.model[x][y].state = LocationType.GROUND;
+						level.model[x][y].type = LocationType.GROUND;
 					}
 				}
 			}
@@ -122,18 +144,18 @@ public class WorldModel {
 		if (loc == null || loc.level == null)
 			return null;
 		int leveli = loc.level.level;
-		if (loc.state == LocationType.HOLE_UP) {
+		if (loc.type == LocationType.HOLE_UP) {
 			if (leveli == 0)
 				return null;
 			Location locto = levels.get(leveli - 1).getAt(loc);
-			if (locto != null && locto.state == LocationType.HOLE_DOWN)
+			if (locto != null && locto.type == LocationType.HOLE_DOWN)
 				return locto;
 		}
-		if (loc.state == LocationType.HOLE_DOWN) {
+		if (loc.type == LocationType.HOLE_DOWN) {
 			if (leveli == levels.size() - 1)
 				return null;
 			Location locto = levels.get(leveli + 1).getAt(loc);
-			if (locto != null && locto.state == LocationType.HOLE_UP)
+			if (locto != null && locto.type == LocationType.HOLE_UP)
 				return locto;
 
 		}
@@ -167,7 +189,7 @@ public class WorldModel {
 			for (int y = 0; y < model[x].length; y++) {
 				if (model[x][y] == null)
 					continue;
-				switch (model[x][y].state) {
+				switch (model[x][y].type) {
 				case GROUND:
 					points.add(model[x][y]);
 					break;
@@ -186,7 +208,7 @@ public class WorldModel {
 			for (int y = 0; y < model[x].length; y++) {
 				if (model[x][y] == null)
 					continue;
-				if (model[x][y].state == state)
+				if (model[x][y].type == state)
 					points.add(model[x][y]);
 			}
 		}

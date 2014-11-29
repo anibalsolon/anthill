@@ -9,5 +9,9 @@ public class State {
 	public State(Location position) {
 		this.position = position;
 	}
+	
+	public String toString(){
+		return "State: " + position;
+	}
 
 }

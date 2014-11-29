@@ -7,14 +7,7 @@ max_age(1800).
 !life.
 
 +!foodpicking:
-	location(CurrLevel, X, Y) & not lvlknow(CurrLevel, _, _)
-<-
-	anthill.actions.wait(0.5);
-	!foodpicking;
-	.	
-		
-+!foodpicking:
-	true
+	location(CurrLevel, X, Y) & lvlknow(CurrLevel, W, H)
 <-
 	.print("Foodpicking!");
 	!go_outside;
@@ -23,6 +16,14 @@ max_age(1800).
 	!bring_to_anthill;
 	!foodpicking;
 	.
+
++!foodpicking:
+	true
+<-
+	.wait(500);
+	!foodpicking;
+	.	
+		
 	
 +!go_outside:
 	true
@@ -48,37 +49,21 @@ max_age(1800).
 <-
 	.print("Extracting...");
 	+food(10);
-	//anthill.actions.wait(1);
+	anthill.actions.wait(0.8);
 	.
 	
 +!bring_to_anthill:
-	true
+	lvlknow(Level, X, Y, "STATE", "SUGAR")
 <-
 
-//	!calculate_steps(Steps);
-//	.print("Found in ", Steps);
-//	anthill.actions.optimizepath(Opt);
+	.print("Bringing...");
 	
 	-path(_, _);
-//	for( .member(Loc, Opt) ) {
-//		+Loc;
-//	}
-
-//	!calculate_steps(Steps);
-//	.print("Optimized to ", Steps);
 	
 	!pheromone;
-	!return;	
+	!return;
+	!move(location(Level, X, Y));
 	.
-	
-//+!calculate_steps(Steps):
-//	true
-//<-
-//	.findall(Id, path(Id, _), Ids);
-//	if(not .empty(Ids)){
-//		.max(Ids, Steps);
-//	}
-//	.
 
 +!return:
 	found & location(CurrLevel, X, Y) & lvlknow(CurrLevel, X, Y, "STATE", State) & State == "HOLE_DOWN"
@@ -109,33 +94,6 @@ max_age(1800).
 	+found;
 	!down;
 	.
-	
-//+!return:
-//	.findall(Id, path(Id, _), Ids) & .max(Ids, MId) & path(MId, location(Level, X, Y)) & lvlknow(Level, X, Y, "STATE", State) & State == "GROUND"
-//<-
-//	.print(Ids);
-//	-path(MId, _);
-//	!move(location(Level, X, Y));
-//	!pheromone;
-//	!return
-//	.
-//	
-//+!return:
-//	.findall(Id, path(Id, _), Ids) & .max(Ids, MId) & path(MId, location(Level, X, Y)) & lvlknow(Level, X, Y, "STATE", State) & State == "HOLE_DOWN"
-//<-
-//	.print("Going down");
-//	.print(MId);
-//	-path(_, _);
-//	!move(location(Level, X, Y));
-//	!pheromone;
-//	!return
-//	.
-//	
-//+!return
-//	: not path(_, _)
-//<-
-//	!down
-//	.
 	
 +!pheromone:
 	true

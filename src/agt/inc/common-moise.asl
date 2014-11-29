@@ -18,7 +18,6 @@
 +!jcm__initial_roles([role(O,H,G,R)|T],Try)
 	: true
    <- !join_workspace(O,H);
-   	 .print("Lookup for art ", G);
       lookupArtifact(G,GId);
       +jcm__art(G,GId);
       focus(GId);

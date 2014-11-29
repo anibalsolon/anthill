@@ -9,9 +9,9 @@ mas ants {
     
     agent maintainer {
     	ag-arch: anthill.Ant
-    	instances: 0
+    	instances: 1
     	focus: anthill, life
-//    	roles: maintainer in anthillws.maintainer
+    	roles: maintainer in anthillws.maintainer
     }
     
     agent wingedmale {
@@ -23,7 +23,7 @@ mas ants {
     
     agent worker {
     	ag-arch: anthill.Ant
-    	instances: 5
+    	instances: 0
     	focus: anthill, life
     	roles: picker in anthillws.foodpicker
     }

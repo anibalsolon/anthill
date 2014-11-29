@@ -10,11 +10,10 @@ import jason.asSyntax.NumberTermImpl;
 import jason.asSyntax.StringTermImpl;
 import jason.asSyntax.Term;
 
-import java.util.Iterator;
 import java.util.List;
 
 import anthill.Ant;
-import anthill.Ant.Heuristic;
+import anthill.Ant.StopCondition;
 import anthill.model.Location;
 import anthill.model.WorldModel.LocationType;
 
@@ -25,26 +24,17 @@ public class findclosest extends DefaultInternalAction {
 	@Override
 	public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
 
-		Ant ant = getAntArch(ts.getUserAgArch());
+		Ant ant = getAntArch(ts.getUserAgArch());		
+		Location current = ant.position;
 
-		Literal location = (Literal) Literal.parseLiteral("location(_, _, _)");
-		Iterator<Literal> relB = ts.getAg().getBB().getCandidateBeliefs(location, un);
-		if (relB == null || !relB.hasNext()) {
-			return false;
-		}
-		Literal literalFrom = (Literal) relB.next();
-		int levelFrom = (int) ((NumberTermImpl) literalFrom.getTerm(0)).solve();
-		int xFrom = (int) ((NumberTermImpl) literalFrom.getTerm(1)).solve();
-		int yFrom = (int) ((NumberTermImpl) literalFrom.getTerm(2)).solve();
-
-		Heuristic heuristic = null;
+		StopCondition heuristic = null;
 		if (args[0].isLiteral()) {
 			Literal literalTo = (Literal) args[0];
 			int levelTo = (int) ((NumberTermImpl) literalTo.getTerm(0)).solve();
 			int xTo = (int) ((NumberTermImpl) literalTo.getTerm(1)).solve();
 			int yTo = (int) ((NumberTermImpl) literalTo.getTerm(2)).solve();
 
-			if (levelFrom != levelTo)
+			if (current.level.level != levelTo)
 				throw new Exception();
 
 			heuristic = heuristicForLocation(xTo, yTo);
@@ -53,7 +43,7 @@ public class findclosest extends DefaultInternalAction {
 			heuristic = heuristicForState(state);
 		}
 
-		List<Location> shortest = ant.calcShortestPath(ant.currentLevel.model[xFrom][yFrom], heuristic);
+		List<Location> shortest = ant.calcShortestPath(ant.currentLevel.model[current.x][current.y], heuristic);
 
 		ListTermImpl path = new ListTermImpl();
 		for (Location p : shortest) {
@@ -63,18 +53,18 @@ public class findclosest extends DefaultInternalAction {
 		return un.unifies(args[1], path);
 	}
 
-	private Heuristic heuristicForState(final LocationType state) {
-		return new Heuristic() {
+	private StopCondition heuristicForState(final LocationType state) {
+		return new StopCondition() {
 			public boolean isGoal(Location loc) {
 				if (loc == null)
 					return false;
-				return loc.state == state;
+				return loc.type == state;
 			}
 		};
 	}
 
-	private Heuristic heuristicForLocation(final int x, final int y) {
-		return new Heuristic() {
+	private StopCondition heuristicForLocation(final int x, final int y) {
+		return new StopCondition() {
 			public boolean isGoal(Location loc) {
 				return loc.x == x && loc.y == y;
 			}

@@ -9,7 +9,35 @@ max_age(80).
 +!reproducting:
 	true
 <-
-	anthill.actions.wait(2);
-	.create_agent(Worker, "worker.asl");
+	!go_outside;
+	!invoke_males;
+	!match_flight;
+	!place_larvae;
+//	.create_agent(Worker, "worker.asl");
 	!reproducting;
+	.
+	
++!go_outside:
+	true
+<-
+	!move(location(0, _, _));
+	.
+	
++!invoke_males:
+	true
+<-
+	.print("Call them!");
+	.
+	
++!match_flight:
+	true
+<-
+	.print("Match!");
+	// TODO kill male?
+	.
+
++!place_larvae:
+	true
+<-
+	.create_agent("larva", "larva.asl");
 	.

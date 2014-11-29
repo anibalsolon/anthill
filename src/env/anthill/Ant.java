@@ -11,7 +11,6 @@ import java.util.Map;
 
 import anthill.model.Level;
 import anthill.model.Location;
-import anthill.model.rl.RLAntEnv;
 import c4jason.CAgentArch;
 
 public class Ant extends JaCaMoAgArch {
@@ -19,12 +18,13 @@ public class Ant extends JaCaMoAgArch {
 	public Level currentLevel;
 	public Location position;
 
-	public RLAntEnv zeroEnv;
+//	public RLPolicy<State, Action> policy;
+//	public RLAntEnv zeroEnv;
+//	public QLearning<State, Action> learn;
 
 	@Override
 	public void init() throws Exception {
 		super.init();
-		zeroEnv = new RLAntEnv(this);
 	}
 
 	public CAgentArch getCartagoArch() {
@@ -42,20 +42,34 @@ public class Ant extends JaCaMoAgArch {
 		return null;
 	}
 
-	public interface HeuristicMDP {
-		public Location findNextStep(List<Location> neighbours);
+	// public interface HeuristicMDP {
+	// public Location findNextStep(List<Location> neighbours);
+	// }
+
+
+	public Location calcNextMove() {
+//		Action act = policy.getAction(zeroEnv, new QFunction() {
+//
+//			public double getValue(QPair qPair) {
+//				return this.getValue(qPair.getState(), qPair.getAction());
+//			}
+//
+//			public double getValue(State state, Action action) {
+//				if (action.to.type == LocationType.FOOD)
+//					return 100;
+//				return action.to.pher * 10;
+//			}
+//			
+//		});		
+//		return act.to;
+		return null;
 	}
 
-	public interface Heuristic {
+	public interface StopCondition {
 		public boolean isGoal(Location loc);
 	}
-
-	public Location calcNextMove(Location loc, HeuristicMDP cond) {
-		List<Location> neighbours = loc.neighbours();
-		return cond.findNextStep(neighbours);
-	}
-
-	public List<Location> calcShortestPath(Location loc, Heuristic cond) {
+	
+	public List<Location> calcShortestPath(Location loc, StopCondition cond) {
 
 		Map<Location, Location> path = new HashMap<Location, Location>();
 		Map<Location, Integer> distance = new HashMap<Location, Integer>();

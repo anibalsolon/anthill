@@ -22,15 +22,15 @@ public class Anthill extends Artifact {
 	public Map<String, Integer> anthillCount;
 
 	boolean counting = false;
-	
+
 	public final static long TIME_DILATATION = 100; // TODO verify english
-	public final static long EVAPORATION_TIME = 5 * TIME_DILATATION;
+	public final static long EVAPORATION_TIME = 8 * TIME_DILATATION;
 
 	public void init() {
 		try {
 			model = new WorldModel(this);
-			view = new AnthillView(this);
-			view.repaint();
+//			view = new AnthillView(this);
+//			view.repaint();
 
 			anthillCount = new HashMap<String, Integer>();
 
@@ -53,6 +53,10 @@ public class Anthill extends Artifact {
 					groundModel[i][j].evaporate(0.1f);
 				}
 			}
+
+			if (view != null && view.level() == 0)
+				view.repaint();
+
 			await_time(EVAPORATION_TIME);
 		}
 	}
@@ -71,6 +75,7 @@ public class Anthill extends Artifact {
 		Location random = model.getRandomSafePlace();
 		model.setAntPosition(ant.getAgentName(), random);
 		location();
+		landmarks();
 		level();
 	}
 
@@ -108,7 +113,7 @@ public class Anthill extends Artifact {
 	public void up() {
 		AgentId ant = getOpUserId();
 		Location current = model.getAntPosition(ant.getAgentName());
-		if (current.state == LocationType.HOLE_UP) {
+		if (current.type == LocationType.HOLE_UP) {
 			Location up = model.getLink(current);
 			model.setAntPosition(ant.getAgentName(), up);
 			location();
@@ -120,7 +125,7 @@ public class Anthill extends Artifact {
 	public void down() {
 		AgentId ant = getOpUserId();
 		Location current = model.getAntPosition(ant.getAgentName());
-		if (current.state == LocationType.HOLE_DOWN) {
+		if (current.type == LocationType.HOLE_DOWN) {
 			Location down = model.getLink(current);
 			model.setAntPosition(ant.getAgentName(), down);
 			location();
@@ -128,30 +133,49 @@ public class Anthill extends Artifact {
 		}
 	}
 
+	public void location() {
+		AgentId ant = getOpUserId();
+		Location loc = model.getAntPosition(ant.getAgentName()).relLoc();
+		signal(ant, "location", loc.level.level, loc.x, loc.y);
+	}
+
 	public void level() {
 		AgentId ant = getOpUserId();
 		Location loc = model.getAntPosition(ant.getAgentName());
 		Level level = loc.level;
 		Location[][] model = level.model;
+
 		signal(ant, "lvlknow", false);
+		await_time(500);
 		signal(ant, "lvlknow", level.level, level.width, level.height);
+		await_time(500);
 
 		for (int x = 0; x < model.length; x++) {
 			for (int y = 0; y < model[x].length; y++) {
 				if (model[x][y] == null)
 					continue;
-				signal(ant, "lvlknow", level.level, x, y, InfoType.STATE.toString(), model[x][y].state.toString());
+				signal(ant, "lvlknow", level.level, x, y, InfoType.STATE.toString(), model[x][y].type.toString());
 				signal(ant, "lvlknow", level.level, x, y, InfoType.PHER.toString(), model[x][y].pher);
 			}
 		}
 
+		await_time(500);
 		signal(ant, "lvlknow", true);
 	}
 
-	public void location() {
+	public void landmarks() {
 		AgentId ant = getOpUserId();
-		Location loc = model.getAntPosition(ant.getAgentName()).relLoc();
-		signal(ant, "location", loc.level.level, loc.x, loc.y);
+		for (Level level : this.model.levels) {
+			for (int x = 0; x < level.model.length; x++) {
+				for (int y = 0; y < level.model[x].length; y++) {
+					if (level.model[x][y] == null)
+						continue;
+					if (level.model[x][y].type.isLandmark())
+						signal(ant, "lvlknow", level.level, x, y, InfoType.STATE.toString(), level.model[x][y].type.toString());
+				}
+			}
+
+		}
 	}
 
 }

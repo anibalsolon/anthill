@@ -21,7 +21,7 @@ public class Location extends Point {
 	private static final long serialVersionUID = 1L;
 
 	public Level level;
-	public LocationType state;
+	public LocationType type;
 	public float pher = 0.0f;
 	public Location link;
 	public int visits = 0;
@@ -86,9 +86,19 @@ public class Location extends Point {
 	}
 
 	public List<Location> neighbours() {
+		return neighbours(null);
+	}
 
-		if (this.level == null)
-			return null;
+	public List<Location> neighbours(Level currLevel) {
+
+		if (this.level == null || this.level.model == null) {
+			if (currLevel != null) {
+				this.level = currLevel;
+			} else {
+				System.out.println("Level NULL");
+				return null;
+			}
+		}
 
 		Location[][] model = this.level.model;
 		List<Location> neighs = new ArrayList<Location>();
@@ -136,15 +146,15 @@ public class Location extends Point {
 	public Action actionTo(Location location) {
 		if (this.x == location.x) {
 			if (this.y == location.y - 1)
-				return new Action(Direction.UP);
+				return new Action(Direction.UP, this, location);
 			if (this.y == location.y + 1)
-				return new Action(Direction.DOWN);
+				return new Action(Direction.DOWN, this, location);
 		}
 		if (this.y == location.y) {
 			if (this.x == location.x - 1)
-				return new Action(Direction.RIGHT);
+				return new Action(Direction.RIGHT, this, location);
 			if (this.x == location.x + 1)
-				return new Action(Direction.LEFT);
+				return new Action(Direction.LEFT, this, location);
 		}
 		return null;
 	}
